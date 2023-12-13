@@ -10,18 +10,28 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
 class Spring6jdbc3ApplicationTests {
+
+    @Test
+    public void testCreateSpeaker() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        Speaker speaker = new Speaker();
+        speaker.setName("James Smith");
+
+        // restTemplate.put("http://localhost:8080/speaker", speaker);
+        speaker = restTemplate.postForObject("http://localhost:8080/speaker", speaker, Speaker.class);
+    }
 
     @Test
     void testGetSpeakers() {
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<List<Speaker>> speakersResponse = restTemplate.exchange(
-                "http://localhost:8080/", HttpMethod.GET,
-                null, new ParameterizedTypeReference<List<Speaker>>() {
+                "http://localhost:8080/speaker", HttpMethod.GET,
+                null, new ParameterizedTypeReference<>() {
                 });
 
         assertTrue(speakersResponse.getBody() != null, "Body is null");
