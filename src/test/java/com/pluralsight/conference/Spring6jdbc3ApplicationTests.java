@@ -39,7 +39,36 @@ class Spring6jdbc3ApplicationTests {
         List<Speaker> speakers = speakersResponse.getBody();
 
         for (Speaker speaker : speakers) {
-            System.out.println("Speaker name: " + speaker.getName());
+            System.out.println("Speaker name: " + speaker.getName() + " " + speaker.getSkill());
         }
+    }
+
+    @Test
+    void testGetSpeaker() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        Speaker speaker = restTemplate.getForObject("http://localhost:8080/speaker/{id}", Speaker.class, 2);
+
+        System.out.println("Speaker: " + speaker.getName() + " (" + speaker.getId() + ")");
+    }
+
+    @Test
+    void testUpdateSpeaker() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        Speaker speaker = restTemplate.getForObject("http://localhost:8080/speaker/{id}", Speaker.class, 2);
+
+        speaker.setName(speaker.getName() + " Sr.");
+
+        restTemplate.put("http://localhost:8080/speaker", speaker);
+
+        System.out.println("Speaker: " + speaker.getName() + " (" + speaker.getId() + ")");
+    }
+
+    @Test
+    void testBatchUpdate() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        restTemplate.getForObject("http://localhost:8080/speaker/batch", Object.class);
     }
 }
