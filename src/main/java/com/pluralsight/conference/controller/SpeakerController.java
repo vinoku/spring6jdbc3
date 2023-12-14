@@ -51,4 +51,10 @@ public class SpeakerController {
         speakerService.batch();
         return null;
     }
+
+    @DeleteMapping("/speaker/delete/{id}")
+    public Object deleteSpeaker(@PathVariable(value = "id") int id) {
+        speakerService.delete(id);
+        return null;
+    }
 }
